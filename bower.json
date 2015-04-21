@@ -1,0 +1,10 @@
+{
+  "name": "djinfluxer",
+  "version": "1.0.2",
+  "main": [
+    "djinfluxer/static/djinfluxer/js/influxer.js"
+  ],
+  "ignore": [
+    "*"
+  ]
+}

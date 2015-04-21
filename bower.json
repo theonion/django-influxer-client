@@ -5,6 +5,8 @@
     "./djinfluxer/static/djinfluxer/js/influxer.js"
   ],
   "ignore": [
-    "!(**/*.js)"
+    "*",
+    "!djinfluxer/static/djinfluxer/js/",
+    "!djinfluxer/static/djinfluxer/js/*"
   ]
 }

@@ -5,6 +5,6 @@
     "./djinfluxer/static/djinfluxer/js/influxer.js"
   ],
   "ignore": [
-    "!./djinfluxer/static/djinfluxer/js/influxer.js"
+    "./!(djinfluxer/static/djinfluxer/js/influxer.js)"
   ]
 }

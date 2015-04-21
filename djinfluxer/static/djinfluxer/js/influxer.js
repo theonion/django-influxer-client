@@ -3,14 +3,28 @@ module.exports = {
   /**
    * initializes the object that fires the request to influxer
    */
-  init: function (influxer_gif, event) {
+  init: function (influxer_gif) {
     this.influxer_gif = influxer_gif;
+  },
+
+  /**
+   * creates a dummy image, sets the source to influxer and sends off the request
+   */
+  sendEvent: function (event, site, contentId, path) {
     this.event = event;
-    this.location = this.getWindowLocation();
-    this.site = this.getSite();
-    this.contentId = this.getContentId();
-    this.path = this.getPath();
-    this.cacheBuster = (new Date()).getTime();
+    this.site = site || this.getSite();
+    this.contentId = contentId || this.getContentId();
+    this.path = path || this.getPath();
+    this.cacheBuster = this.getCacheBuster();
+    var url = this.influxer_gif +
+      '?' + this.cacheBuster +
+      '&site=' + this.site +
+      '&content_id=' + this.contentId +
+      '&event=' + this.event +
+      '&path=' + this.path;
+    var img = new Image();
+    img.src = url;
+    return img;
   },
 
   /**
@@ -24,7 +38,8 @@ module.exports = {
    * gets the site name to send to influxer
    */
   getSite: function () {
-    var hostname = this.location.hostname;
+    var location = this.getWindowLocation();
+    var hostname = location.hostname;
     var hostnameParts = hostname.split('.');
     return hostnameParts[hostnameParts.length - 2];
   },
@@ -33,7 +48,8 @@ module.exports = {
    * gets the content id or null from the path to send to influxer
    */
   getContentId: function () {
-    var pathname = this.location.pathname;
+    var location = this.getWindowLocation();
+    var pathname = location.pathname;
     var urlRegex = /^.*\-\d+$/;
     var extractionRegex = /\d+$/gm;
     var contentId = null;
@@ -52,21 +68,14 @@ module.exports = {
    * gets the current path
    */
   getPath: function () {
-    return this.location.pathname;
+    var location = this.getWindowLocation();
+    return location.pathname;
   },
 
   /**
-   * creates a dummy image, sets the source to influxer and sends off the request
+   * gets the current date
    */
-  sendEvent: function () {
-    var url = this.influxer_gif +
-      '?' + this.cacheBuster +
-      '&site=' + this.site +
-      '&content_id=' + this.contentId +
-      '&event=' + this.event +
-      '&path=' + this.path;
-    var img = new Image();
-    img.src = url;
-    return img;
+  getCacheBuster: function () {
+    return (new Date()).getTime();
   }
 };

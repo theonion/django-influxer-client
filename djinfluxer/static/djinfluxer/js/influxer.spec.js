@@ -1,6 +1,5 @@
 describe('Influxer', function () {
   var influxer_gif = 'http://influxer.local/influxer.gif';
-  var event = 'pageview';
   var influxer;
 
   beforeEach(function () {
@@ -9,50 +8,12 @@ describe('Influxer', function () {
 
   describe('#init', function () {
     beforeEach(function () {
-      sinon.stub(influxer, 'getWindowLocation').returns({
-        hostname: 'barf.onion.com',
-        pathname: '/articles/you-should-be-reading-this-123456'
-      });
-      influxer.init(influxer_gif, event);
-    });
-
-    afterEach(function () {
-      influxer.getWindowLocation.restore();
+      influxer.init(influxer_gif);
     });
 
     it('sets `influxer_gif`', function () {
       expect(influxer.influxer_gif).to.not.eql(null);
       expect(influxer.influxer_gif).to.not.eql(undefined);
-    });
-
-    it('sets `event`', function () {
-      expect(influxer.event).to.not.eql(null);
-      expect(influxer.event).to.not.eql(undefined);
-    });
-
-    it('sets `location`', function () {
-      expect(influxer.location).to.not.eql(null);
-      expect(influxer.location).to.not.eql(undefined);
-    });
-
-    it('sets `site`', function () {
-      expect(influxer.site).to.not.eql(null);
-      expect(influxer.site).to.not.eql(undefined);
-    });
-
-    it('sets `contentId`', function () {
-      expect(influxer.contentId).to.not.eql(null);
-      expect(influxer.contentId).to.not.eql(undefined);
-    });
-
-    it('sets `path`', function () {
-      expect(influxer.path).to.not.eql(null);
-      expect(influxer.path).to.not.eql(undefined);
-    });
-
-    it('sets `cacheBuster`', function () {
-      expect(influxer.cacheBuster).to.not.eql(null);
-      expect(influxer.cacheBuster).to.not.eql(undefined);
     });
   });
 
@@ -62,7 +23,7 @@ describe('Influxer', function () {
         hostname: 'barf.onion.com',
         pathname: '/articles/you-should-be-reading-this-123456'
       });
-      influxer.init(influxer_gif, event);
+      influxer.init(influxer_gif);
     });
 
     afterEach(function () {
@@ -70,8 +31,8 @@ describe('Influxer', function () {
     });
 
     it('gets the site name from the hostname', function () {
-      influxer.getSite();
-      expect(influxer.site).to.eql('onion');
+      var site = influxer.getSite();
+      expect(site).to.eql('onion');
     });
   });
 
@@ -81,7 +42,7 @@ describe('Influxer', function () {
         hostname: 'barf.onion.com',
         pathname: '/articles/you-should-be-reading-this-123456'
       });
-      influxer.init(influxer_gif, event);
+      influxer.init(influxer_gif);
     });
 
     afterEach(function () {
@@ -89,8 +50,8 @@ describe('Influxer', function () {
     });
 
     it('gets the content id name from the pathname', function () {
-      influxer.getContentId();
-      expect(influxer.contentId).to.eql('123456');
+      var contentId = influxer.getContentId();
+      expect(contentId).to.eql('123456');
     });
   });
 
@@ -100,7 +61,7 @@ describe('Influxer', function () {
         hostname: 'barf.onion.com',
         pathname: '/articles/you-should-be-reading-this-123456'
       });
-      influxer.init(influxer_gif, event);
+      influxer.init(influxer_gif);
     });
 
     afterEach(function () {
@@ -108,8 +69,8 @@ describe('Influxer', function () {
     });
 
     it('gets the content id name from the pathname', function () {
-      influxer.getPath();
-      expect(influxer.path).to.eql('/articles/you-should-be-reading-this-123456');
+      var path = influxer.getPath();
+      expect(path).to.eql('/articles/you-should-be-reading-this-123456');
     });
   });
 
@@ -119,17 +80,39 @@ describe('Influxer', function () {
         hostname: 'barf.onion.com',
         pathname: '/articles/you-should-be-reading-this-123456'
       });
-      influxer.init(influxer_gif, event);
+      sinon.stub(influxer, 'getCacheBuster').returns('789');
+      influxer.init(influxer_gif);
     });
 
     afterEach(function () {
       influxer.getWindowLocation.restore();
+      influxer.getCacheBuster.restore();
     });
 
-    it('creates a new dummy image from requesting its source from influxer', function () {
-      var src = influxer_gif + '?' + influxer.cacheBuster + '&site=onion&content_id=123456&event=pageview&path=/articles/you-should-be-reading-this-123456';
-      var img = influxer.sendEvent();
-      expect(img.src).to.eql(src);
+    describe('creates a new dummy image from requesting its source from influxer', function () {
+      it('with just the event name', function () {
+        var src = influxer_gif + '?789&site=onion&content_id=123456&event=pageview&path=/articles/you-should-be-reading-this-123456';
+        var img = influxer.sendEvent('pageview');
+        expect(img.src).to.eql(src);
+      });
+
+      it('event, site', function () {
+        var src = influxer_gif + '?789&site=barf&content_id=123456&event=pageview&path=/articles/you-should-be-reading-this-123456';
+        var img = influxer.sendEvent('pageview', 'barf');
+        expect(img.src).to.eql(src);
+      });
+
+      it('event, site, contentId', function () {
+        var src = influxer_gif + '?789&site=barf&content_id=456789&event=pageview&path=/articles/you-should-be-reading-this-123456';
+        var img = influxer.sendEvent('pageview', 'barf', '456789');
+        expect(img.src).to.eql(src);
+      });
+
+      it('event, site, contentId, path', function () {
+        var src = influxer_gif + '?789&site=barf&content_id=456789&event=pageview&path=/crap/';
+        var img = influxer.sendEvent('pageview', 'barf', '456789', '/crap/');
+        expect(img.src).to.eql(src);
+      });
     });
   });
 });

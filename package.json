@@ -1,0 +1,26 @@
+{
+  "name": "django-influxer-client",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "devDependencies": {
+    "browserify": "~8.1.1",
+    "chai": "^2.1.1",
+    "karma": "^0.12.31",
+    "karma-browserify": "^3.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-mocha": "^0.1.10",
+    "karma-mocha-debug": "^0.1.2",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon": "^1.0.4",
+    "mocha": "^2.2.1",
+    "phantomjs-polyfill": "0.0.1",
+    "sinon": "^1.13.0"
+  },
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+  }
+}

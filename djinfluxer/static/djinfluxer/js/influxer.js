@@ -10,11 +10,11 @@ module.exports = {
   /**
    * creates a dummy image, sets the source to influxer and sends off the request
    */
-  sendEvent: function (event, site, contentId, path) {
-    this.event = event;
-    this.site = site || this.getSite();
-    this.contentId = contentId || this.getContentId();
-    this.path = path || this.getPath();
+  sendEvent: function (options) {
+    this.event = options.event;
+    this.site = options.site || this.getSite();
+    this.contentId = options.contentId || this.getContentId();
+    this.path = options.path || this.getPath();
     this.cacheBuster = this.getCacheBuster();
     var url = this.influxer_gif +
       '?' + this.cacheBuster +

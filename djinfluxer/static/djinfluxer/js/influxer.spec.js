@@ -92,25 +92,39 @@ describe('Influxer', function () {
     describe('creates a new dummy image from requesting its source from influxer', function () {
       it('with just the event name', function () {
         var src = influxer_gif + '?789&site=onion&content_id=123456&event=pageview&path=/articles/you-should-be-reading-this-123456';
-        var img = influxer.sendEvent('pageview');
+        var img = influxer.sendEvent({
+          event: 'pageview'
+        });
         expect(img.src).to.eql(src);
       });
 
       it('event, site', function () {
         var src = influxer_gif + '?789&site=barf&content_id=123456&event=pageview&path=/articles/you-should-be-reading-this-123456';
-        var img = influxer.sendEvent('pageview', 'barf');
+        var img = influxer.sendEvent({
+          event: 'pageview',
+          site: 'barf'
+        });
         expect(img.src).to.eql(src);
       });
 
       it('event, site, contentId', function () {
         var src = influxer_gif + '?789&site=barf&content_id=456789&event=pageview&path=/articles/you-should-be-reading-this-123456';
-        var img = influxer.sendEvent('pageview', 'barf', '456789');
+        var img = influxer.sendEvent({
+          event: 'pageview',
+          site: 'barf',
+          contentId: '456789'
+        });
         expect(img.src).to.eql(src);
       });
 
       it('event, site, contentId, path', function () {
         var src = influxer_gif + '?789&site=barf&content_id=456789&event=pageview&path=/crap/';
-        var img = influxer.sendEvent('pageview', 'barf', '456789', '/crap/');
+        var img = influxer.sendEvent({
+          event: 'pageview',
+          site: 'barf',
+          contentId: '456789',
+          path: '/crap/'
+        });
         expect(img.src).to.eql(src);
       });
     });

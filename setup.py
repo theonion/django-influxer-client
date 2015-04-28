@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name="django-influxer-client",
-    version="1.0.2",
+    version="1.0.3",
     description="Modules and JS to work with Django-Influxer integration",
     author="Vince Forgione",
     author_email="vforgione@theonion.com",
@@ -11,6 +11,6 @@ setup(
     packages=["djinfluxer"],
     install_requires=[
         "Django>1.7,<1.8",
-        "influxdb==2.0.1",
+        "influxdb==0.1.13",
     ]
 )

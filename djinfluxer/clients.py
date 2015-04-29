@@ -67,12 +67,10 @@ class InfluxerClient(object):
         points = []
         for result in results:
             name = result["name"]
-            cols = results["columns"]
-            for point_set in result["points"]:
-                points.append(Point.from_query_result({
-                    "name": name,
-                    "columns": cols,
-                    "points": point_set,
-                }))
+            columns = results["columns"]
+            for point in result["points"]:
+                obj = dict(zip(columns, point))
+                obj['site'] = name
+                points.append(Point(**obj))
 
-        return points
+        return sorted(points, key=lambda p: p.value, reverse=True)

@@ -66,6 +66,13 @@ class InfluxerClient(object):
         results = self._client.query(query)
         points = []
         for result in results:
-            points.append(Point.from_query_result(result))
+            name = result["name"]
+            cols = results["columns"]
+            for point_set in result["points"]:
+                points.append(Point.from_query_result({
+                    "name": name,
+                    "columns": cols,
+                    "points": point_set,
+                }))
 
         return points

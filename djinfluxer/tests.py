@@ -22,22 +22,6 @@ class PointTests(TestCase):
         """
         self.assertLess(self.point1, self.point2)
 
-    def test__from_query_result(self):
-        """tests the from_query_results of Point
-        """
-        result = {
-            "name": "onion",
-            "columns": ["content_id", "value", "event", "path"],
-            "points": [123, 10, "pageview", "/article/read-this-123"],
-        }
-        point = Point.from_query_result(result)
-        self.assertIsInstance(point, Point)
-        self.assertEqual(point.site, "onion")
-        self.assertEqual(point.content_id, 123)
-        self.assertEqual(point.value, 10)
-        self.assertEqual(point.event, "pageview")
-        self.assertEqual(point.path, "/article/read-this-123")
-
 
 class ClientTests(TestCase):
     """tests methods of the InfluxerClient object

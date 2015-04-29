@@ -67,7 +67,7 @@ class InfluxerClient(object):
         points = []
         for result in results:
             name = result["name"]
-            columns = results["columns"]
+            columns = result["columns"]
             for point in result["points"]:
                 obj = dict(zip(columns, point))
                 obj['site'] = name

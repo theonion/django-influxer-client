@@ -8,12 +8,14 @@ class Point(object):
     a piece of information stored in influxdb
     """
 
-    def __init__(self, site, content_id, value, event=None, path=None):
+    def __init__(self, site, content_id, value, event=None, path=None, time=None, sequence_number=None):
         self.site = site
         self.content_id = content_id
         self.value = value
         self.event = event
         self.path = path
+        self.time = time
+        self.sequence_number = sequence_number
 
     @classmethod
     def from_query_result(cls, result):

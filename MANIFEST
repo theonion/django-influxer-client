@@ -2,6 +2,7 @@
 setup.py
 djinfluxer/__init__.py
 djinfluxer/clients.py
+djinfluxer/dummy.py
 djinfluxer/models.py
 djinfluxer/tests.py
 djinfluxer/utils.py

@@ -3,6 +3,7 @@ from django.test import TestCase
 from requests.exceptions import ConnectionError
 
 from .clients import InfluxerClient
+from .dummy import DummyClient
 from .models import Point
 from .utils import is_time_offset_valid, get_django_instance_from_point
 
@@ -41,6 +42,22 @@ class ClientTests(TestCase):
                 self.assertIsInstance(point, Point)
         except ConnectionError:
             return
+
+
+class DummyClientTests(TestCase):
+    """tests methods of the DummyClient object
+    """
+
+    def setUp(self):
+        """sets up a client to an influxdb service at root:root@localhost:8086
+        """
+        self.client = DummyClient("127.0.0.1", 8086, "root", "root", "influxdb", "test", False, None)
+
+    def test__get_content(self):
+        """tests the get_content method returns an empty list
+        """
+        points = self.client.get_content("1d")
+        self.assertEqual(points, [])
 
 
 class UtilTests(TestCase):

@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name="django-influxer-client",
-    version="1.0.9",
+    version="1.0.10",
     description="Modules and JS to work with Django-Influxer integration",
     author="Vince Forgione",
     author_email="vforgione@theonion.com",

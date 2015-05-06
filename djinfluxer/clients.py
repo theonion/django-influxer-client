@@ -59,9 +59,10 @@ class InfluxerClient(object):
         if not is_time_offset_valid(offset):
             raise Exception("The offset provided is not valid.")
 
-        query = "SELECT * " \
+        query = "SELECT content_id, sum(value) as value " \
                 "FROM {series} " \
-                "WHERE time > now() - {offset};".format(series=self.series, offset=offset)
+                "WHERE time > now() - {offset} " \
+                "GROUP BY content_id;".format(series=self.series, offset=offset)
 
         results = self._client.query(query)
         points = []

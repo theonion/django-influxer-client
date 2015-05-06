@@ -17,6 +17,12 @@ class Point(object):
         self.time = time
         self.sequence_number = sequence_number
 
+    def __str__(self):
+        return "<Point: content_id={} value={}>".format(self.content_id, self.value)
+
+    def __repr__(self):
+        return str(self)
+
     def __lt__(self, other):
         """compares this instance to another based on their `value` attributes
 

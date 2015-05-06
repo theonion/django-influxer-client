@@ -1,3 +1,5 @@
+from sys import maxint
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from requests.exceptions import ConnectionError
@@ -31,15 +33,21 @@ class ClientTests(TestCase):
     def setUp(self):
         """sets up a client to an influxdb service at root:root@localhost:8086
         """
-        self.client = InfluxerClient("127.0.0.1", 8086, "root", "root", "influxdb", "test", False, None)
+        self.client = InfluxerClient("127.0.0.1", 8086, "root", "root", "influxdb", "test")
 
     def test__get_content(self):
         """tests the get_content method of InfluxerClient - will skip if connection errs
         """
+        value = maxint
+        content_ids = []
         try:
-            points = self.client.get_content("100000w", limit=10)
+            points = self.client.get_content("15m", limit=25)
             for point in points:
                 self.assertIsInstance(point, Point)
+                self.assertLessEqual(point.value, value)
+                self.assertNotIn(point.content_id, content_ids)
+                value = point.value
+                content_ids.append(point.content_id)
         except ConnectionError:
             return
 
@@ -51,12 +59,23 @@ class DummyClientTests(TestCase):
     def setUp(self):
         """sets up a client to an influxdb service at root:root@localhost:8086
         """
-        self.client = DummyClient("127.0.0.1", 8086, "root", "root", "influxdb", "test", False, None)
+        self.client = DummyClient("127.0.0.1", 8086, "root", "root", "influxdb", "test")
+
+    def test__from_real_client(self):
+        client = InfluxerClient("127.0.0.1", 8086, "root", "root", "influxdb", "test")
+        dummy = DummyClient.from_real_client(client)
+        self.assertIsInstance(dummy, DummyClient)
+        self.assertTrue(hasattr(dummy, "get_content"))
 
     def test__get_content(self):
         """tests the get_content method returns an empty list
         """
         points = self.client.get_content("1d")
+        self.assertEqual(points, [])
+        # test dummy client from `from_real_client` constructor
+        client = InfluxerClient("127.0.0.1", 8086, "root", "root", "influxdb", "test")
+        dummy = DummyClient.from_real_client(client)
+        points = dummy.get_content("1d")
         self.assertEqual(points, [])
 
 

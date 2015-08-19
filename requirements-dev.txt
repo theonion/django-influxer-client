@@ -1,2 +1,11 @@
 -r requirements.txt
-pytest-django==2.8.0
+
+Django
+py
+pytest
+pytest-django
+python-dateutil
+pytz
+requests
+six
+wsgiref

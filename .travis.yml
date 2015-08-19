@@ -1,7 +1,6 @@
 language: python
 python:
   - '2.7'
-  - '3.2'
   - '3.4'
 install:
   - pip install -e .
@@ -9,4 +8,3 @@ install:
   - npm install
 script:
   - py.test djinfluxer/tests.py
-  - npm test

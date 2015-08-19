@@ -63,7 +63,7 @@ class InfluxerClient(object):
                 "FROM {series} " \
                 "WHERE time > now() - {offset} " \
                 "GROUP BY content_id;".format(series=self.series, offset=offset)
-        results = self._client.query(query)
+        results = self._client.query(query).raw
 
         points = []
         results = results.get("series", [])
